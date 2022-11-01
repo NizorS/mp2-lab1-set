@@ -198,15 +198,15 @@ TBitField TBitField::operator~(void)
 
 
 // Ввод
-istream& operator>>(istream& ist, TBitField& bf) 
+istream& operator>>(istream& istr, TBitField& bf) 
 {
 	TELEM in;
 	for (size_t i = 0; i < bf.GetLength(); i++)
 	{
-		ist >> in;
+		istr >> in;
 		bf.SetBit(i);
 	}
-	return ist;
+	return istr;
 }
 
 
