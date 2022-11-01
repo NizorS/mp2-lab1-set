@@ -212,15 +212,15 @@ istream& operator>>(istream& ist, TBitField& bf)
 
 
 // Вывод
-ostream& operator<<(ostream& ost, const TBitField& bf) 
+ostream& operator<<(ostream& ostr, const TBitField& bf) 
 {
 	size_t length = bf.GetLength();
 	for (size_t i = 0; i < length; i++)
 	{
 		if (bf.GetBit(i))
-			ost << '1';
+			ostr << '1';
 		else
-			ost << '0';
+			ostr << '0';
 	}
-	return ost;
+	return ostr;
 }}
