@@ -3,6 +3,12 @@
 
 TBitField::TBitField(int len)
 {
+	if (length <= 0) throw exception("Length < 0");
+	LengthBIT = length;
+	if (LengthBIT % sizeof(TELEM) != 0) MLength = LengthBIT / sizeof(TELEM) + 1;
+	else MLength = LengthBIT / sizeof(TELEM);
+	pMem = new TELEM[MLength];
+	memset(pMem, 0, sizeof(TELEM) * MLength);
 }
 
 TBitField::TBitField(const TBitField &bf) // конструктор копирования
