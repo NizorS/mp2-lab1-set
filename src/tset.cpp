@@ -137,16 +137,16 @@ TSet TSet::operator~(void)
 
 
 // Ввод
-istream& operator>>(istream& ist, TSet& s) 
+istream& operator>>(istream& istr, TSet& s) 
 {
-    ist >> s.BitField;
-    return ist;
+    istr >> s.BitField;
+    return istr;
 }
 
 
 // Вывод
-ostream& operator<<(ostream& ost, const TSet& s) 
+ostream& operator<<(ostream& ostr, const TSet& s) 
 {
-    ost << s.BitField;
-    return ost;
+    ostr << s.BitField;
+    return ostr;
 }
