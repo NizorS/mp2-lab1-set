@@ -2,8 +2,7 @@
 //
 // tset.cpp - Copyright (c) Гергель В.П. 04.10.2001
 //   Переработано для Microsoft Visual Studio 2008 Сысоевым А.В. (19.04.2015)
-//
-// Множество - реализация через битовые поля
+
 
 #include "tset.h"
 
@@ -37,9 +36,10 @@ int TSet::GetMaxPower(void) const // получить макс. к-во эл-т�
 int TSet::IsMember(const int Elem) const // элемент множества?
 {
     if (BitField.GetBit(Elem))
+    {
         return 1;
-    else
-        return 0;
+    }
+    return 0;
 }
 
 void TSet::InsElem(const int Elem) // включение элемента множества
@@ -50,7 +50,6 @@ void TSet::InsElem(const int Elem) // включение элемента мно
 void TSet::DelElem(const int Elem) // исключение элемента множества
 {
     BitField.ClrBit(Elem);
-
 }
 
 // теоретико-множественные операции
@@ -64,47 +63,54 @@ TSet& TSet::operator=(const TSet& s) // присваивание
 
 int TSet::operator==(const TSet& s) const // сравнение
 {
-    return BitField == s.BitField;
+    if (BitField != s.BitField)
+    {
+        return 0;
+    }
+    return 1;
 }
 
 int TSet::operator!=(const TSet& s) const // сравнение
 {
-    return BitField != s.BitField;
+    if ((*this) == s)
+    {
+        return 0;
+    }
+    return 1;
 }
 
 TSet TSet::operator+(const TSet& s) // объединение
 {
-    TSet adding(max(MaxPower, s.MaxPower));
-    adding.BitField = BitField | s.BitField;
-    return adding;
+    TSet res((*this).BitField | s.BitField);
+    return res;
 }
 
 TSet TSet::operator+(const int Elem) // объединение с элементом
 {
-    TSet adding(*this);
-    adding.BitField.SetBit(Elem);
-    return adding;
+
+    TSet res(*this);
+    res.InsElem(Elem);
+    return res;
 }
 
 TSet TSet::operator-(const int Elem) // разность с элементом
 {
-    TSet difference(*this);
-    difference.BitField.ClrBit(Elem);
-    return difference;
+
+    TSet res(*this);
+    res.DelElem(Elem);
+    return res;
 }
 
 TSet TSet::operator*(const TSet& s) // пересечение
 {
-    TSet intersection(max(MaxPower, s.MaxPower));
-    intersection.BitField = BitField & s.BitField;
-    return intersection;
+    TSet res((*this).BitField & s.BitField);
+    return res;
 }
 
 TSet TSet::operator~(void) // дополнение
 {
-    TSet addition(MaxPower);
-    addition.BitField = ~BitField;
-    return addition;
+    TSet res(~(*this).BitField);
+    return res;
 }
 
 // перегрузка ввода/вывода
