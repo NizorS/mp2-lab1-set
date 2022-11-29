@@ -17,9 +17,9 @@ TBitField::TBitField(int len)
 	else
 	{
 		BitLen = len;
-		MemLen = BitLen / (sizeof(TELEM) * 8) + (BitLen % (sizeof(TELEM) * 8) != 0);
-		pMem = new TELEM[MemLen];
-		memset(pMem, 0, MemLen * sizeof(TELEM));
+		LengthMem = BitLen / (sizeof(TELEM) * 8) + (BitLen % (sizeof(TELEM) * 8) != 0);
+		pMem = new TELEM[LengthMem];
+		memset(pMem, 0, LengthMem * sizeof(TELEM));
 	}
 }
 
@@ -33,9 +33,9 @@ TBitField::TBitField(int len)
 TBitField::TBitField(const TBitField& bf) 
 {
 	BitLen = bf.BitLen;
-	MemLen = bf.MemLen;
-	pMem = new TELEM[MemLen];
-	for (int i = 0; i < MemLen; i++)
+	LengthMem = bf.LengthMem;
+	pMem = new TELEM[LengthMem];
+	for (int i = 0; i < LengthMem; i++)
 		pMem[i] = bf.pMem[i];
 }
 
@@ -124,9 +124,9 @@ TBitField& TBitField::operator=(const TBitField& bf)
 		if (pMem != nullptr)
 			delete[] pMem;
 		BitLen = bf.BitLen;
-		MemLen = bf.MemLen;
-		pMem = new TELEM[MemLen];
-		for (int i = 0; i < MemLen; i++)
+		LengthMem = bf.LengthMem;
+		pMem = new TELEM[LengthMem];
+		for (int i = 0; i < LengthMem; i++)
 			pMem[i] = bf.pMem[i];
 	}
 	return *this;
@@ -140,7 +140,7 @@ int TBitField::operator==(const TBitField& bf) const
 {
 	if (BitLen != bf.BitLen)
 		return 0;
-	for (int i = 0; i < MemLen; i++)
+	for (int i = 0; i < LengthMem; i++)
 		if (pMem[i] != bf.pMem[i])
 			return 0;
 	return 1;
@@ -163,14 +163,14 @@ TBitField TBitField::operator|(const TBitField& bf)
 	if (BitLen > bf.BitLen)
 	{
 		TBitField tmp(*this);
-		for (int i = 0; i < bf.MemLen; i++)
+		for (int i = 0; i < bf.LengthMem; i++)
 			tmp.pMem[i] |= bf.pMem[i];
 		return tmp;
 	}
 	else
 	{
 		TBitField tmp(bf);
-		for (int i = 0; i < MemLen; i++)
+		for (int i = 0; i < LengthMem; i++)
 			tmp.pMem[i] |= pMem[i];
 		return tmp;
 	}
@@ -184,19 +184,19 @@ TBitField TBitField::operator&(const TBitField& bf)
 	if (BitLen > bf.BitLen)
 	{
 		TBitField tmp(*this);
-		for (int i = 0; i < bf.MemLen; i++)
+		for (int i = 0; i < bf.LengthMem; i++)
 			tmp.pMem[i] &= bf.pMem[i];
-		for (int i = BitLen; i < MemLen * 8; i++)        
+		for (int i = BitLen; i < LengthMem * 8; i++)
 			tmp.pMem[GetMemIndex(i)] &= ~GetMemMask(i);  
 		return tmp;
 	}
 	else
 	{
 		TBitField tmp(bf);
-		for (int i = 0; i < MemLen; i++)
+		for (int i = 0; i < LengthMem; i++)
 			tmp.pMem[i] &= pMem[i];
 
-		for (int i = bf.BitLen; i < bf.MemLen * 8; i++)  
+		for (int i = bf.BitLen; i < bf.LengthMem * 8; i++)
 			tmp.pMem[GetMemIndex(i)] &= ~GetMemMask(i);  
 
 		return tmp;
@@ -225,7 +225,7 @@ TBitField TBitField::operator~(void)
 istream& operator>>(istream& istr, TBitField& bf)  
 {
 	char inp;
-	for (int i = 0; i < bf.MemLen; i++)
+	for (int i = 0; i < bf.LengthMem; i++)
 	{
 		istr >> inp;
 		if (inp == '0')
